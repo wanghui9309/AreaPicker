@@ -1,5 +1,3 @@
-# AreaPicker
-
 ## 如何使用
 * 手动导入
     * 将项目中`AreaPicker`文件夹拖入您的项目中
