@@ -1,14 +1,20 @@
 # AreaPicker
 
-##如何使用
+## 如何使用
 * 手动导入
     * 将项目中`AreaPicker`文件夹拖入您的项目中
     * 导入主头文件即可:`#import "WHAreaPickerController.h"`
 
-##area.plist
+## 使用参考
+```oc
+WHAreaPickerController *area = [WHAreaPickerController areaPickerController:self];
+[self presentViewController:area animated:NO completion:nil];
+```
+
+## area.plist
 * 该文件是存放省市区的数据源
 
-##WHAreaPickerController.h
+## WHAreaPickerController.h
 ```oc
 @class WHAreaPickerController;
 
@@ -41,10 +47,4 @@
  @param lastAreas 上次选中的地区下标 delegate 返回的,在传进来
  */
 + (instancetype)areaPickerController:(id<WHAreaPickerControllerDelegate>)delegate lastAreas:(NSArray<NSNumber *> *)lastAreas;
-```
-
-##使用参考
-```oc
-WHAreaPickerController *area = [WHAreaPickerController areaPickerController:self];
-[self presentViewController:area animated:NO completion:nil];
 ```
