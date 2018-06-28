@@ -2,11 +2,13 @@
 //  WHAreaPickerController.m
 //  布偶屋
 //
-//  Created by WangHui on 2018/1/2.
+//  Created by WangHui on 2018/6/28.
 //  Copyright © 2018年 WangHui. All rights reserved.
 //
 
 #import "WHAreaPickerController.h"
+
+#import "WHAreaList.h"
 
 @interface WHAreaPickerController ()<UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -76,7 +78,7 @@
         pickerView.delegate = self;
         pickerView.dataSource = self;
         pickerView.translatesAutoresizingMaskIntoConstraints = NO;
-        pickerView.backgroundColor = [UIColor colorWithRed:236/255.0f green:236/255.0f blue:236/255.0f alpha:1.0f];
+        pickerView.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:pickerView];
         
         [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeLeading];
