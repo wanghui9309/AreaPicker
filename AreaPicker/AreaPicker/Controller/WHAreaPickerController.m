@@ -16,6 +16,10 @@
 @property (weak, nonatomic) NSLayoutConstraint *pickerViewBottomCons;
 /** 工具视图 */
 @property (weak, nonatomic) UIView *toolView;
+/** 取消按钮 */
+@property (weak, nonatomic) UIButton *cancelBtn;
+/** 确认按钮 */
+@property (weak, nonatomic) UIButton *confirmBtn;
 /** 数据源 */
 @property (strong, nonatomic) NSArray<WHAreaList *> *dataSource;
 /** 选中的省份 下标 默认为0 */
@@ -55,6 +59,14 @@
     return vc;
 }
 
+#pragma mark - Layout
+- (NSLayoutConstraint *)equallyRelatedConstraintWithView:(UIView *)view toView:(UIView *)toView attribute:(NSLayoutAttribute)attribute
+{
+    NSLayoutConstraint *layoutConstraint = [NSLayoutConstraint constraintWithItem:view attribute:attribute relatedBy:NSLayoutRelationEqual toItem:toView attribute:attribute multiplier:1.0 constant:0.0];
+    layoutConstraint.active = YES;
+    return layoutConstraint;
+}
+
 #pragma mark - Lazy
 - (UIPickerView *)pickerView
 {
@@ -67,9 +79,9 @@
         pickerView.backgroundColor = [UIColor colorWithRed:236/255.0f green:236/255.0f blue:236/255.0f alpha:1.0f];
         [self.view addSubview:pickerView];
         
-        [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeLeading];
-        [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeTrailing];
-        self.pickerViewBottomCons = [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeBottomMargin];
+        [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeLeading];
+        [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeTrailing];
+        self.pickerViewBottomCons = [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeBottomMargin];
         self.pickerViewBottomCons.constant = 300;
         
         _pickerView = pickerView;
@@ -86,8 +98,8 @@
         view.translatesAutoresizingMaskIntoConstraints = NO;
         [self.view addSubview:view];
         
-        [self equallyRelatedConstraintWithView:view attribute:NSLayoutAttributeLeading];
-        [self equallyRelatedConstraintWithView:view attribute:NSLayoutAttributeTrailing];
+        [self equallyRelatedConstraintWithView:view toView:self.view attribute:NSLayoutAttributeLeading];
+        [self equallyRelatedConstraintWithView:view toView:self.view attribute:NSLayoutAttributeTrailing];
         NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.pickerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
         bottom.active = YES;
         NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.0];
@@ -98,19 +110,59 @@
     return _toolView;
 }
 
-#pragma mark - Layout
-- (NSLayoutConstraint *)equallyRelatedConstraintWithView:(UIView *)view attribute:(NSLayoutAttribute)attribute
+- (UIButton *)cancelBtn
 {
-    NSLayoutConstraint *layoutConstraint = [NSLayoutConstraint constraintWithItem:view attribute:attribute relatedBy:NSLayoutRelationEqual toItem:self.view attribute:attribute multiplier:1.0 constant:0.0];
-    layoutConstraint.active = YES;
-    return layoutConstraint;
+    if (_cancelBtn == nil)
+    {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        btn.translatesAutoresizingMaskIntoConstraints = NO;
+        [btn setTitle:@"取消" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.toolView addSubview:btn];
+        
+        NSLayoutConstraint *layoutConstraint = [self equallyRelatedConstraintWithView:btn toView:self.toolView attribute:NSLayoutAttributeLeading];
+        layoutConstraint.constant = 10.0f;
+        [self equallyRelatedConstraintWithView:btn toView:self.toolView attribute:NSLayoutAttributeCenterY];
+        
+        _cancelBtn = btn;
+    }
+    return _cancelBtn;
+}
+
+- (UIButton *)confirmBtn
+{
+    if (_confirmBtn == nil)
+    {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        btn.translatesAutoresizingMaskIntoConstraints = NO;
+        [btn setTitle:@"确定" forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(confirmAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.toolView addSubview:btn];
+        
+        NSLayoutConstraint *layoutConstraint = [self equallyRelatedConstraintWithView:btn toView:self.toolView attribute:NSLayoutAttributeTrailing];
+        layoutConstraint.constant = -10.0f;
+        [self equallyRelatedConstraintWithView:btn toView:self.toolView attribute:NSLayoutAttributeCenterY];
+        
+        _confirmBtn = btn;
+    }
+    return _confirmBtn;
 }
 
 #pragma mark - 系统方法
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self initData];
+    [self initView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.pickerViewBottomCons.constant = 0;
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 - (void)viewDidLayoutSubviews
@@ -133,20 +185,11 @@
     [self confirmAction];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.pickerViewBottomCons.constant = 0;
-    [UIView animateWithDuration:0.5 animations:^{
-        [self.view layoutIfNeeded];
-    }];
-}
-
+#pragma mark - 自定义方法
 /**
- 初始化数据
+ 初始化视图
  */
-- (void)initData
+- (void)initView
 {
     NSString *filePath = [NSBundle.mainBundle pathForResource:@"area" ofType:@"plist"];
     NSArray *areaArr = [NSArray arrayWithContentsOfFile:filePath];
@@ -154,6 +197,8 @@
     [self.pickerView reloadAllComponents];
     
     [self toolView];
+    [self cancelBtn];
+    [self confirmBtn];
 }
 
 #pragma mark - Action
@@ -175,14 +220,23 @@
  */
 - (void)confirmAction
 {
+    // 省份
     WHAreaList *prov = self.dataSource[self.selectProv];
+    // 城市
     WHAreaList *city = prov.child[self.selectCity];
+    // 县区
     WHAreaList *area = city.child[self.selectArea];
     
-    if ([self.delegate respondsToSelector:@selector(areaPickerController:didFinishPickingArea:)])
+    // 区域下标
+    NSArray *areaIndex = @[@(self.selectProv), @(self.selectCity), @(self.selectArea)];
+    // 区域名称
+    NSArray *areaName = @[prov.area_name, city.area_name, area.area_name];
+    
+    if ([self.delegate respondsToSelector:@selector(areaPickerController:didFinishPickingArea:areaName:)])
     {
-        [self.delegate areaPickerController:self didFinishPickingArea:@[@(self.selectProv), @(self.selectCity), @(self.selectArea)]];
+        [self.delegate areaPickerController:self didFinishPickingArea:areaIndex areaName:areaName];
     }
+    
     [self cancelAction];
 }
 

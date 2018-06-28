@@ -16,12 +16,13 @@
 
 @optional
 /**
- 完成了选择地区
+ 完成了选择区域
 
  @param picker 选择器
- @param area 地区下标[0:省份下标,1:城市下标,2:县区下标]
+ @param areaIndex 区域下标[0:省份下标,1:城市下标,2:县区下标]
+ @param areaName 区域名称[0:省份名称,1:城市名称,2:县区名称]
  */
-- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)area;
+- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)areaIndex areaName:(NSArray<NSString *> *)areaName;
 
 @end
 

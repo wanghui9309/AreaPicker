@@ -31,9 +31,9 @@
 }
 
 #pragma mark - WHAreaPickerControllerDelegate
-- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)area
+- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)areaIndex areaName:(NSArray<NSString *> *)areaName
 {
-    
+    self.label.text = [NSString stringWithFormat:@"%@ %@ %@", areaName.firstObject, areaName[1], areaName.lastObject];
 }
 
 
