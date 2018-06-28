@@ -12,6 +12,8 @@
 
 @interface ViewController ()<WHAreaPickerControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *label;
+
 @end
 
 @implementation ViewController
@@ -25,12 +27,13 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     WHAreaPickerController *area = [WHAreaPickerController areaPickerController:self];
-    [self presentViewController:area animated:YES completion:nil];
+    [self presentViewController:area animated:NO completion:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - WHAreaPickerControllerDelegate
+- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)area
+{
+    
 }
 
 

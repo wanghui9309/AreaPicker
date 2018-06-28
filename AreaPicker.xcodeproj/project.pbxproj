@@ -15,7 +15,6 @@
 		7B07FD7D20E4788A0073EEB3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07FD7520E4788A0073EEB3 /* AppDelegate.m */; };
 		7B07FD7E20E4788A0073EEB3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B07FD7620E4788A0073EEB3 /* Info.plist */; };
 		7B07FD8820E47C990073EEB3 /* WHAreaPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07FD8020E47C990073EEB3 /* WHAreaPickerController.m */; };
-		7B07FD8920E47C990073EEB3 /* WHAreaPickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B07FD8120E47C990073EEB3 /* WHAreaPickerController.xib */; };
 		7B07FD8A20E47C990073EEB3 /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B07FD8420E47C990073EEB3 /* area.plist */; };
 		7B07FD8B20E47C990073EEB3 /* WHAreaList.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07FD8720E47C990073EEB3 /* WHAreaList.m */; };
 /* End PBXBuildFile section */
@@ -32,7 +31,6 @@
 		7B07FD7520E4788A0073EEB3 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7B07FD7620E4788A0073EEB3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B07FD8020E47C990073EEB3 /* WHAreaPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHAreaPickerController.m; sourceTree = "<group>"; };
-		7B07FD8120E47C990073EEB3 /* WHAreaPickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WHAreaPickerController.xib; sourceTree = "<group>"; };
 		7B07FD8220E47C990073EEB3 /* WHAreaPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHAreaPickerController.h; sourceTree = "<group>"; };
 		7B07FD8420E47C990073EEB3 /* area.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = area.plist; sourceTree = "<group>"; };
 		7B07FD8620E47C990073EEB3 /* WHAreaList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHAreaList.h; sourceTree = "<group>"; };
@@ -114,7 +112,6 @@
 			children = (
 				7B07FD8220E47C990073EEB3 /* WHAreaPickerController.h */,
 				7B07FD8020E47C990073EEB3 /* WHAreaPickerController.m */,
-				7B07FD8120E47C990073EEB3 /* WHAreaPickerController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -196,7 +193,6 @@
 				7B07FD7E20E4788A0073EEB3 /* Info.plist in Resources */,
 				7B07FD7B20E4788A0073EEB3 /* Main.storyboard in Resources */,
 				7B07FD7920E4788A0073EEB3 /* Assets.xcassets in Resources */,
-				7B07FD8920E47C990073EEB3 /* WHAreaPickerController.xib in Resources */,
 				7B07FD7A20E4788A0073EEB3 /* LaunchScreen.storyboard in Resources */,
 				7B07FD8A20E47C990073EEB3 /* area.plist in Resources */,
 			);

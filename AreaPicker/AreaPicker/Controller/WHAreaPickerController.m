@@ -11,9 +11,11 @@
 @interface WHAreaPickerController ()<UIPickerViewDataSource, UIPickerViewDelegate>
 
 /** 地址选择器视图 */
-@property (weak, nonatomic) IBOutlet UIPickerView *areaPickerView;
+@property (weak, nonatomic) UIPickerView *pickerView;
+/** 地址选择器 底部约束 */
+@property (weak, nonatomic) NSLayoutConstraint *pickerViewBottomCons;
 /** 工具视图 */
-@property (weak, nonatomic) IBOutlet UIView *toolView;
+@property (weak, nonatomic) UIView *toolView;
 /** 数据源 */
 @property (strong, nonatomic) NSArray<WHAreaList *> *dataSource;
 /** 选中的省份 下标 默认为0 */
@@ -48,8 +50,60 @@
     vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     vc.delegate = delegate;
     vc.lastAreas = lastAreas;
+    vc.view.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     
     return vc;
+}
+
+#pragma mark - Lazy
+- (UIPickerView *)pickerView
+{
+    if (_pickerView == nil)
+    {
+        UIPickerView *pickerView = [[UIPickerView alloc] init];
+        pickerView.delegate = self;
+        pickerView.dataSource = self;
+        pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+        pickerView.backgroundColor = [UIColor colorWithRed:236/255.0f green:236/255.0f blue:236/255.0f alpha:1.0f];
+        [self.view addSubview:pickerView];
+        
+        [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeLeading];
+        [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeTrailing];
+        self.pickerViewBottomCons = [self equallyRelatedConstraintWithView:pickerView attribute:NSLayoutAttributeBottomMargin];
+        self.pickerViewBottomCons.constant = 300;
+        
+        _pickerView = pickerView;
+    }
+    return _pickerView;
+}
+
+- (UIView *)toolView
+{
+    if (_toolView == nil)
+    {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = [UIColor whiteColor];
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.view addSubview:view];
+        
+        [self equallyRelatedConstraintWithView:view attribute:NSLayoutAttributeLeading];
+        [self equallyRelatedConstraintWithView:view attribute:NSLayoutAttributeTrailing];
+        NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.pickerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+        bottom.active = YES;
+        NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.0];
+        height.active = YES;
+        
+        _toolView = view;
+    }
+    return _toolView;
+}
+
+#pragma mark - Layout
+- (NSLayoutConstraint *)equallyRelatedConstraintWithView:(UIView *)view attribute:(NSLayoutAttribute)attribute
+{
+    NSLayoutConstraint *layoutConstraint = [NSLayoutConstraint constraintWithItem:view attribute:attribute relatedBy:NSLayoutRelationEqual toItem:self.view attribute:attribute multiplier:1.0 constant:0.0];
+    layoutConstraint.active = YES;
+    return layoutConstraint;
 }
 
 #pragma mark - 系统方法
@@ -74,43 +128,18 @@
     }
 }
 
-- (void)dealloc
-{
-    NSLog(@"%s", __func__);
-}
-
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [self confirmAction];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.areaPickerView.hidden = YES;
-    self.toolView.hidden = YES;
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.areaPickerView.hidden = NO;
-    self.toolView.hidden = NO;
     
-    CGRect srect = self.areaPickerView.frame;
-    CGRect drect = srect;
-    CGRect stRect = self.toolView.frame;
-    CGRect dtRect = stRect;
-
-    float ah = srect.size.height+stRect.size.height;
-    srect.origin.y += ah;
-    stRect.origin.y += ah;
-    self.areaPickerView.frame= srect;
-    self.toolView.frame = stRect;
-
-    [UIView animateWithDuration:0.2 animations:^{
-        self.areaPickerView.frame=drect;
-        self.toolView.frame = dtRect;
+    self.pickerViewBottomCons.constant = 0;
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.view layoutIfNeeded];
     }];
 }
 
@@ -122,36 +151,29 @@
     NSString *filePath = [NSBundle.mainBundle pathForResource:@"area" ofType:@"plist"];
     NSArray *areaArr = [NSArray arrayWithContentsOfFile:filePath];
     self.dataSource = [WHAreaList wh_objectArrayWithKeyValuesArray:areaArr];
-    [self.areaPickerView reloadAllComponents];
+    [self.pickerView reloadAllComponents];
+    
+    [self toolView];
 }
 
 #pragma mark - Action
 /**
  取消
  */
-- (IBAction)cancelAction
+- (void)cancelAction
 {
-    
-    CGRect drect = self.areaPickerView.frame;
-    CGRect dtRect = self.toolView.frame;
-    
-    float ah = drect.size.height+dtRect.size.height;
-    drect.origin.y += ah;
-    dtRect.origin.y += ah;
-    
-    [UIView animateWithDuration:0.2 animations:^{
-        self.areaPickerView.frame=drect;
-        self.toolView.frame = dtRect;
+    self.pickerViewBottomCons.constant = 300;
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         [self dismissViewControllerAnimated:NO completion:nil];
     }];
-    
 }
 
 /**
  确认
  */
-- (IBAction)confirmAction
+- (void)confirmAction
 {
     WHAreaList *prov = self.dataSource[self.selectProv];
     WHAreaList *city = prov.child[self.selectCity];
@@ -278,8 +300,8 @@
  */
 - (void)pickerReloadComponent:(NSInteger)component selectRow:(NSInteger)row
 {
-    [self.areaPickerView reloadComponent:component];
-    [self.areaPickerView selectRow:row inComponent:component animated:YES];
+    [self.pickerView reloadComponent:component];
+    [self.pickerView selectRow:row inComponent:component animated:YES];
 }
 
 @end
