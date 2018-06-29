@@ -83,8 +83,8 @@
         
         [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeLeading];
         [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeTrailing];
-        self.pickerViewBottomCons = [self equallyRelatedConstraintWithView:pickerView toView:self.view attribute:NSLayoutAttributeBottomMargin];
-        self.pickerViewBottomCons.constant = 300;
+        self.pickerViewBottomCons = [NSLayoutConstraint constraintWithItem:pickerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottomMargin multiplier:1.0 constant:300.0];
+        self.pickerViewBottomCons.active = YES;
         
         _pickerView = pickerView;
     }
