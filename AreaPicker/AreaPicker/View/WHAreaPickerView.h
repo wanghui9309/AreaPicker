@@ -1,6 +1,5 @@
 //
 //  WHAreaPickerView.h
-//  JYReplaceBatteryBiz_Example
 //
 //  Created by 王辉 on 2019/3/2.
 //  Copyright © 2019 WangHui. All rights reserved.
