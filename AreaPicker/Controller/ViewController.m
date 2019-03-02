@@ -8,9 +8,9 @@
 
 #import "ViewController.h"
 
-#import "WHAreaPickerController.h"
+#import "WHAreaPickerView.h"
 
-@interface ViewController ()<WHAreaPickerControllerDelegate>
+@interface ViewController ()<WHAreaPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *label;
 
@@ -26,14 +26,14 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    WHAreaPickerController *area = [WHAreaPickerController areaPickerController:self];
-    [self presentViewController:area animated:NO completion:nil];
+    WHAreaPickerView *area = [WHAreaPickerView areaPickerView];
+    area.delegate = self;
 }
 
 #pragma mark - WHAreaPickerControllerDelegate
-- (void)areaPickerController:(WHAreaPickerController *)picker didFinishPickingArea:(NSArray<NSNumber *> *)areaIndex areaName:(NSArray<NSString *> *)areaName
+- (void)areaPickerViewDidFinish:(WHAreaPickerView *)picker
 {
-    self.label.text = [NSString stringWithFormat:@"%@ %@ %@", areaName.firstObject, areaName[1], areaName.lastObject];
+    self.label.text = [picker.areaName componentsJoinedByString:@" "];
 }
 
 

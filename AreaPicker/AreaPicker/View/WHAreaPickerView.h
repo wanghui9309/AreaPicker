@@ -1,31 +1,25 @@
-![AreaPicker.gif](https://github.com/wanghui9309/AreaPicker/blob/master/AreaPicker/Supporting%20Files/AreaPicker.gif)
+//
+//  WHAreaPickerView.h
+//  JYReplaceBatteryBiz_Example
+//
+//  Created by 王辉 on 2019/3/2.
+//  Copyright © 2019 WangHui. All rights reserved.
+//
 
-## 如何使用
-* 手动导入
-    * 将项目中`AreaPicker`文件夹拖入您的项目中
-    * 导入主头文件即可:`#import "WHAreaPickerView.h"`
+#import <UIKit/UIKit.h>
 
-## 使用参考
-```oc
-WHAreaPickerView *area = [WHAreaPickerView areaPickerView];
-area.delegate = self;
-```
+NS_ASSUME_NONNULL_BEGIN
 
-## area.plist
-* 该文件是存放省市区的数据源
-
-## WHAreaPickerView.h
-```oc
 @class WHAreaPickerView;
 
 @protocol WHAreaPickerViewDelegate <NSObject>
 
 @optional
 /**
-完成了选择区域
-
-@param picker 选择器
-*/
+ 完成了选择区域
+ 
+ @param picker 选择器
+ */
 - (void)areaPickerViewDidFinish:(WHAreaPickerView *)picker;
 
 @end
@@ -40,9 +34,10 @@ area.delegate = self;
 @property (nonatomic, strong) NSArray<NSString *> *areaName;
 
 /**
-快速创建
-*/
+ 快速创建
+ */
 + (instancetype)areaPickerView;
 
 @end
-```
+
+NS_ASSUME_NONNULL_END

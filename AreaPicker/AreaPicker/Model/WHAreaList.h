@@ -1,6 +1,5 @@
 //
 //  WHAreaList.h
-//  布偶屋
 //
 //  Created by WangHui on 2017/12/29.
 //  Copyright © 2017年 WangHui. All rights reserved.
